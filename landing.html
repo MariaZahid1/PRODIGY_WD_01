@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Navigation Menu</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            scroll-behavior: smooth;
+        }
+
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background-color: #333;
+            padding: 10px 0;
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
+            z-index: 1000;
+            box-shadow: none;
+        }
+
+        .nav-menu {
+            list-style-type: none;
+            display: flex;
+            justify-content: center;
+            margin: 0;
+            padding: 0;
+        }
+
+        .nav-item {
+            margin: 0 20px;
+        }
+
+        .nav-link {
+            text-decoration: none;
+            color: white;
+            font-size: 18px;
+            transition: color 0.3s ease;
+            padding: 8px 15px;
+        }
+
+        .nav-link:hover {
+            color: #ff9800;
+            background-color: #444;
+            border-radius: 5px;
+        }
+
+        .active-link {
+            color: #ff9800;
+        }
+
+        .section {
+            height: 100vh;
+            padding: 20px;
+            text-align: center;
+            font-size: 24px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #home {
+            background-color: #bd3636;
+        }
+
+        #about {
+            background-color: #781edf;
+        }
+
+        #services {
+            background-color: #8f1b51;
+        }
+
+        #contact {
+            background-color: #b2b2b2;
+        }
+
+        /* Mobile Styles */
+        @media (max-width: 768px) {
+            .nav-menu {
+                flex-direction: column;
+                position: absolute;
+                top: 60px;
+                left: -100%;
+                width: 100%;
+                background-color: #333;
+                transition: left 0.3s ease;
+            }
+
+            .navbar.active .nav-menu {
+                left: 0;
+            }
+
+            .nav-item {
+                margin: 10px 0;
+            }
+
+            .nav-link {
+                font-size: 22px;
+            }
+
+            .menu-toggle {
+                display: block;
+                font-size: 30px;
+                color: white;
+                cursor: pointer;
+                position: absolute;
+                top: 15px;
+                right: 20px;
+            }
+        }
+
+        /* Desktop Styles */
+        @media (min-width: 769px) {
+            .menu-toggle {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar">
+        <span class="menu-toggle">☰</span>
+        <ul class="nav-menu">
+            <li class="nav-item"><a href="#home" class="nav-link">Home</a></li>
+            <li class="nav-item"><a href="#about" class="nav-link">About</a></li>
+            <li class="nav-item"><a href="#services" class="nav-link">Services</a></li>
+            <li class="nav-item"><a href="#contact" class="nav-link">Contact</a></li>
+        </ul>
+    </nav>
+
+    <div id="home" class="section">Home Section</div>
+    <div id="about" class="section">About Section</div>
+    <div id="services" class="section">Services Section</div>
+    <div id="contact" class="section">Contact Section</div>
+
+    <!-- Embedded JavaScript -->
+    <script>
+        const navbar = document.querySelector('.navbar');
+        const menuToggle = document.querySelector('.menu-toggle');
+        const navMenu = document.querySelector('.nav-menu');
+        const navLinks = document.querySelectorAll('.nav-link');
+
+        // Mobile menu toggle
+        menuToggle.addEventListener('click', () => {
+            navbar.classList.toggle('active');
+        });
+
+        // Change navbar background and shadow on scroll
+        window.addEventListener('scroll', function() {
+            if (window.scrollY > 50) {
+                navbar.style.backgroundColor = '#555';
+                navbar.style.boxShadow = '0 4px 8px rgba(0, 0, 0, 0.3)';
+            } else {
+                navbar.style.backgroundColor = '#333';
+                navbar.style.boxShadow = 'none';
+            }
+
+            // Highlight active link
+            let current = '';
+            document.querySelectorAll('.section').forEach(section => {
+                const sectionTop = section.offsetTop;
+                if (pageYOffset >= sectionTop - 60) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            navLinks.forEach(link => {
+                link.classList.remove('active-link');
+                if (link.getAttribute('href') === `#${current}`) {
+                    link.classList.add('active-link');
+                }
+            });
+        });
+
+        // Smooth scrolling for in-page links
+        navLinks.forEach(link => {
+            link.addEventListener('click', function(event) {
+                event.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+    </script>
+</body>
+</html>
